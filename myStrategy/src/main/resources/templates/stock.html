@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>股票K线图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+          font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif;
+          background: #eef1f6;
+          margin: 0;
+          padding: 0;
+        }
+        h2 {
+          text-align: center;
+          font-size: 24px;
+          margin: 30px 0 10px;
+          color: #333;
+        }
+        #controls {
+          text-align: center;
+          margin-bottom: 5px;
+          margin-top: 5px;
+        }
+        input[type="text"] {
+          padding: 8px 14px;
+          font-size: 14px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          width: 200px;
+        }
+        input[type="text"]:focus {
+          border-color: #409EFF;
+          outline: none;
+        }
+        button {
+          padding: 8px 16px;
+          font-size: 14px;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-left: 10px;
+          transition: background-color 0.3s;
+        }
+        #stopBtn.playing {
+          background-color: #f56c6c;
+        }
+        #stopBtn.playing:hover {
+          background-color: #e05b5b;
+        }
+        #stopBtn.paused {
+          background-color: #67C23A;
+        }
+        #stopBtn.paused:hover {
+          background-color: #85ce61;
+        }
+        #nextBtn {
+          background-color: #409EFF;
+          display: none; /* Initially hidden */
+        }
+        #nextBtn:hover {
+          background-color: #66b1ff;
+        }
+        #chart, #chart_index {
+          width: 95%;
+          height: 600px;
+          margin: 20px auto;
+          border-radius: 8px;
+          background: #fff;
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+          padding: 15px;
+        }
+        #progress-info {
+          text-align: center;
+          margin: 10px 0;
+          font-size: 14px;
+          color: #666;
+        }
+        .time-info {
+          text-align: center;
+          margin: 5px 0;
+          font-size: 13px;
+          color: #888;
+        }
+    </style>
+</head>
+<body>
+<div id="controls">
+    <input type="text" id="stockCode" placeholder="如 SZ002046">
+    <button id="stopBtn" class="playing">停止播放</button>
+    <button id="nextBtn">下一个</button>
+</div>
+<div id="progress-info"></div>
+<div id="time-info" class="time-info"></div>
+<div id="chart"></div>
+<div id="chart_index"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("stockCode").addEventListener("blur", function() {
+            const value = this.value.trim();
+            if (value) {
+                stopRotation();
+                loadData(value);
+            }
+        });
+
+        document.getElementById("stopBtn").addEventListener("click", togglePlayback);
+        document.getElementById("nextBtn").addEventListener("click", nextStock);
+
+        loadCode().then(() => {
+            if (stockCodes.length > 0) {
+                startTime = new Date();
+                updateProgressInfo();
+                updateTimeInfo();
+                playStockSequence();
+            } else {
+                console.warn("股票代码列表为空");
+            }
+        });
+    });
+
+    let stockCodes = [];
+    let stockNames = {};
+    let industries = {};
+    let rates = {};
+    let currentIndex = 0;
+    let rotationInterval = null;
+    const rotationSpeed = 3000;
+    let startTime = null;
+    let isAutoPlaying = true;
+
+    const stockCodeInput = document.getElementById('stockCode');
+    const progressInfo = document.getElementById('progress-info');
+    const timeInfo = document.getElementById('time-info');
+    const stopBtn = document.getElementById('stopBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateProgressInfo() {
+        const total = stockCodes.length;
+        const remaining = total - currentIndex - 1;
+        progressInfo.innerHTML = `总股票数: ${total} | 已播放: ${currentIndex + 1} | 剩余: ${remaining}`;
+    }
+
+    function updateTimeInfo() {
+        if (!startTime) return;
+
+        const now = new Date();
+        const elapsed = Math.floor((now - startTime) / 1000);
+        const remainingStocks = stockCodes.length - currentIndex - 1;
+        const estimatedRemaining = Math.floor(remainingStocks * rotationSpeed / 1000);
+
+        const elapsedStr = formatTime(elapsed);
+        const remainingStr = formatTime(estimatedRemaining);
+
+        timeInfo.innerHTML = `已耗时: ${elapsedStr} | 预计剩余: ${remainingStr}`;
+    }
+
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        return [
+            hours.toString().padStart(2, '0'),
+            minutes.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    }
+
+    function stopRotation() {
+        if (rotationInterval) {
+            clearInterval(rotationInterval);
+            rotationInterval = null;
+        }
+    }
+
+    function togglePlayback() {
+        if (isAutoPlaying) {
+            // 停止自动播放
+            stopRotation();
+            isAutoPlaying = false;
+            stopBtn.textContent = '继续播放';
+            stopBtn.className = 'paused';
+            nextBtn.style.display = 'inline-block'; // 显示下一个按钮
+        } else {
+            // 继续自动播放
+            isAutoPlaying = true;
+            stopBtn.textContent = '停止播放';
+            stopBtn.className = 'playing';
+            nextBtn.style.display = 'none'; // 隐藏下一个按钮
+            playStockSequence();
+        }
+    }
+
+    function nextStock() {
+        if (currentIndex >= stockCodes.length - 1) {
+            alert("已经是最后一只股票");
+            return;
+        }
+
+        currentIndex++;
+        stockCodeInput.value = stockCodes[currentIndex];
+        loadData(stockCodes[currentIndex]);
+        updateProgressInfo();
+        updateTimeInfo();
+    }
+
+    function playStockSequence() {
+        if (rotationInterval) clearInterval(rotationInterval);
+
+        loadData(stockCodes[currentIndex]);
+        updateProgressInfo();
+        updateTimeInfo();
+
+        rotationInterval = setInterval(() => {
+            currentIndex++;
+
+            if (currentIndex >= stockCodes.length) {
+                clearInterval(rotationInterval);
+                rotationInterval = null;
+                isAutoPlaying = false;
+                stopBtn.textContent = '重新播放';
+                stopBtn.className = 'paused';
+                nextBtn.style.display = 'inline-block'; // 显示下一个按钮
+                console.log("股票序列播放完毕");
+                updateProgressInfo();
+                updateTimeInfo();
+                return;
+            }
+
+            stockCodeInput.value = stockCodes[currentIndex];
+            loadData(stockCodes[currentIndex]);
+            updateProgressInfo();
+            updateTimeInfo();
+        }, rotationSpeed);
+    }
+
+    const chart = echarts.init(document.getElementById('chart'));
+    const chart_index = echarts.init(document.getElementById('chart_index'));
+
+    loadDataIndex();
+
+    function loadCode() {
+        return fetch(`/api/stock/codes`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('网络响应异常');
+                }
+                return res.json();
+            })
+            .then(data => {
+                stockCodes = data.codes || [];
+                stockNames = data.names || {};
+                industries = data.industries || {};
+                rates = data.rates || {};
+                console.log("加载股票代码完成:", stockCodes);
+                return data;
+            })
+            .catch(err => {
+                console.error("加载失败：", err);
+                alert("请求失败，请检查 API 接口是否正常");
+                throw err;
+            });
+    }
+
+    function loadData(code) {
+        fetch(`/api/stock/daily?code=${code}`)
+            .then(res => res.json())
+            .then(data => renderChart(chart, data, code))
+            .catch(err => {
+                console.error("加载失败：", err);
+                alert("请求失败，请检查 API 接口是否正常");
+            });
+    }
+
+    function loadDataIndex() {
+        const code = 'SH000001';
+        fetch(`/api/stock/daily?code=${code}`)
+            .then(res => res.json())
+            .then(data => renderChart(chart_index, data, code))
+            .catch(err => {
+                console.error("加载指数失败：", err);
+                alert("请求失败，请检查 API 接口是否正常");
+            });
+    }
+
+    function renderChart(targetChart, data, code) {
+        if (!data || data.length === 0) {
+            alert("没有数据");
+            return;
+        }
+
+        const dates = data.map(item => item.date);
+        const klineData = data.map(item => [
+            item.open,
+            item.closePrice,
+            item.low,
+            item.high
+        ]);
+
+        // 准备均线数据
+        const ma5 = data.map(item => item.ma5 || null);
+        const ma10 = data.map(item => item.ma10 || null);
+        const ma20 = data.map(item => item.ma20 || null);
+
+        const markPoints = data.filter(item => item.signalDay)
+                  .map(item => ({
+                    name: item.signalType,
+                    coord: [item.date, item.closePrice],
+                    value: item.tooltipMessage || '⚡',
+                    symbol: item.markSymbol || 'pin',
+                    symbolSize: 20,
+                    itemStyle: { color: item.markColor || '#666' },
+                    label: {
+                      show: true,
+                      formatter: item.tooltipMessage || item.signalType
+                    }
+                  }));
+
+          const platformMarks = data.filter(item => item.winStartDay || item.winEndDay)
+              .map(item => ({
+                name: item.winStartDay ? '起' : '尾',
+                coord: [item.date, item.closePrice],
+                value: item.winStartDay ? 'Start' : 'End',
+                symbol: 'circle',
+                symbolSize: 16,
+                itemStyle: {
+                  color: item.winStartDay ? '#3399ff' : '#cc3333'
+                },
+                label: {
+                  show: true,
+                  formatter: item.winStartDay ? '起' : '尾'
+                }
+              }));
+         const mergedMarkPoints = [...markPoints, ...platformMarks];
+        // 准备成交量数据
+        const volumes = data.map(item => item.volume || 0);
+        const volumeColors = data.map((item, index) => {
+            if (index === 0) return '#999';
+            return item.closePrice >= data[index-1].closePrice ? '#ef232a' : '#14b143';
+        });
+
+        targetChart.setOption({
+            title: {
+                text: code === 'SH000001' ? '上证指数' : `${code} ${stockNames[code] || ''}`,
+                subtext: code === 'SH000001' ? '' : `${industries[code] || ''} ${rates[code] || ''}`,
+                left: 'center',
+                textStyle: {
+                    color: '#333',
+                    fontSize: 13
+                },
+                subtextStyle: {
+                    color: '#666',
+                    fontSize: 13,
+                    marginTop: 5
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                },
+                formatter: function(params) {
+                    if (!params || params.length === 0) return '';
+
+                    const date = params[0].axisValue;
+                    const item = data[params[0].dataIndex];
+                    const last = data[data.length-1];
+                    const days = data.length-params[0].dataIndex;
+                    const diff = last.closePrice - item.closePrice;
+                    const rate = ((diff / item.closePrice) * 100).toFixed(2);
+                    const rateColor = rate > 0 ? '#ef232a' : '#14b143';
+                    const sign = rate >= 0 ? '+' : '';
+
+                    // 获取均线值
+                    const ma5Value = ma5[params[0].dataIndex] !== null ? ma5[params[0].dataIndex].toFixed(2) : '--';
+                    const ma10Value = ma10[params[0].dataIndex] !== null ? ma10[params[0].dataIndex].toFixed(2) : '--';
+                    const ma20Value = ma20[params[0].dataIndex] !== null ? ma20[params[0].dataIndex].toFixed(2) : '--';
+
+                    return `
+                        <div style="font-size:16px;font-weight:bold;margin-bottom:10px;color:#333;">
+                            ${date} ${stockNames[code] || code}
+                        </div>
+                        <div style="display:flex;justify-content:space-between;width:280px;">
+                            <div style="text-align:left;">
+                                <div>开盘: ${item.open.toFixed(2)}</div>
+                                <div>收盘: ${item.closePrice.toFixed(2)}</div>
+                                <div>最高: ${item.high.toFixed(2)}</div>
+                                <div>最低: ${item.low.toFixed(2)}</div>
+                                <div>${days}天涨幅: <span style="color:${rateColor}">${sign}${rate}%</span></div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div>涨跌: ${(item.percent >= 0 ? '+' : '') + item.percent.toFixed(2)}%</div>
+                                <div>成交量: ${(item.volume/10000).toFixed(2)}万手</div>
+                                <div>MA5: ${ma5Value}</div>
+                                <div>MA10: ${ma10Value}</div>
+                                <div>MA20: ${ma20Value}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+            legend: {
+                data: ['K线', '成交量', 'MA5', 'MA10', 'MA20'],
+                left: 'left',
+                top: 10
+            },
+            grid: [
+                {  // 主图区域
+                    left: '10%',
+                    right: '10%',
+                    top: '15%',
+                    height: '60%',
+                    bottom: '25%'
+                },
+                {  // 成交量区域
+                    left: '10%',
+                    right: '10%',
+                    top: '80%',
+                    height: '15%'
+                }
+            ],
+            xAxis: [
+                {  // 主图的x轴
+                    type: 'category',
+                    data: dates,
+                    gridIndex: 0,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false }
+                },
+                {  // 成交量图的x轴
+                    type: 'category',
+                    data: dates,
+                    gridIndex: 1,
+                    axisLabel: {
+                        interval: Math.floor(dates.length / 12),
+                        rotate: 30,
+                        color: '#888'
+                    },
+                    axisLine: { onZero: false }
+                }
+            ],
+            yAxis: [
+                {  // 主图的y轴
+                    type: 'value',
+                    gridIndex: 0,
+                    scale: true,
+                    min: 'dataMin',
+                    max: 'dataMax',
+                    splitNumber: 13,
+                    splitLine: { show: true }
+                },
+                {  // 成交量图的y轴
+                    type: 'value',
+                    gridIndex: 1,
+                    axisLabel: { show: false },
+                    splitLine: { show: false }
+                }
+            ],
+            series: [
+                {  // K线图
+                    name: 'K线',
+                    type: 'candlestick',
+                    data: klineData,
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                        markPoint: {
+                          data: mergedMarkPoints
+                        },
+                    itemStyle: {
+                        color: '#ef232a',    // 上涨颜色
+                        color0: '#14b143',   // 下跌颜色
+                        borderColor: '#ef232a',
+                        borderColor0: '#14b143'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            borderWidth: 2
+                        }
+                    }
+                },
+                {  // 成交量柱状图
+                    name: '成交量',
+                    type: 'bar',
+                    data: volumes,
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    barWidth: '70%',
+                    itemStyle: {
+                        color: function(params) {
+                            return volumeColors[params.dataIndex];
+                        },
+                        opacity: 0.8,
+                        borderColor: 'rgba(0,0,0,0.1)',
+                        borderWidth: 1,
+                        borderRadius: [2, 2, 0, 0]
+                    }
+                },
+                {  // MA5均线
+                    name: 'MA5',
+                    type: 'line',
+                    data: ma5,
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 1.5,
+                        color: '#FF7F50'
+                    }
+                },
+                {  // MA10均线
+                    name: 'MA10',
+                    type: 'line',
+                    data: ma10,
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 1.5,
+                        color: '#6A5ACD'
+                    }
+                },
+                {  // MA20均线
+                    name: 'MA20',
+                    type: 'line',
+                    data: ma20,
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 1.5,
+                        color: '#20B2AA'
+                    }
+                }
+            ]
+        });
+    }
+</script>
+</body>
+</html>

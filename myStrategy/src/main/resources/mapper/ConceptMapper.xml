@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.ConceptMapper">
+    <insert id="upsert" parameterType="com.strategy.model.Concept" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO stock_concept (
+        concept_name,
+        concept_code,
+        concept_type
+        ) VALUES (
+        #{conceptName},
+        #{conceptCode},
+        #{conceptType}
+        )
+    </insert>
+    <delete id="deleteRelation">
+        delete from stock_concept_relation where stock_code = #{stockCode}
+    </delete>
+
+    <select id="getConcept" resultType="com.strategy.model.Concept">
+        select * from stock_concept where concept_code = #{conceptCode}
+    </select>
+
+    <select id="getConceptByName" resultType="com.strategy.model.Concept">
+        select * from stock_concept where concept_name = #{conceptName}
+    </select>
+
+    <insert id="batchInsertRelation" parameterType="list">
+        INSERT INTO stock_concept_relation (
+        stock_code,
+        concept_id,
+        conceptLeadingStocks,
+        conceptFullDesc,
+        concept_name,
+        stockName
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.stockCode},
+            #{item.conceptId},
+            #{item.conceptLeadingStocks},
+            #{item.conceptFullDesc},
+            #{item.conceptName},
+            #{item.stockName}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        stock_code = VALUES(stock_code),
+        concept_id = VALUES(concept_id),
+        conceptLeadingStocks = VALUES(conceptLeadingStocks),
+        conceptFullDesc = VALUES(conceptFullDesc),
+        concept_name = VALUES(concept_name),
+        stockName = VALUES(stockName)
+    </insert>
+
+    <select id="getStockConcepts" resultType="com.strategy.model.StockDto">
+        SELECT  stock_code,concept_name from stock_concept_relation
+    </select>
+    <select id="hasConcept" resultType="java.lang.Integer">
+        select count(1) from stock_concept_relation where stock_code = #{stockCode}
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.StockPoolMapper">
+    <insert id="insert" parameterType="com.strategy.model.StockPool">
+        INSERT INTO stock_pool
+        (stock_code, stock_name,status, create_time, update_time)
+        VALUES
+        (#{stockCode}, #{stockName}, #{status}, NOW(), NOW())
+    </insert>
+    <update id="updatePool">
+        update stock_pool set status=2 where stock_code= #{stockCode}
+    </update>
+    <delete id="delPool">
+        delete from stock_pool
+    </delete>
+    <select id="getSelPool" resultType="com.strategy.model.StockPool">
+        SELECT a.stock_code as stockCode,a.stock_name as stockName,
+        b.industry as industry, c.monthRate as monthRate,c.yearRate as yearRate
+        ,c.last3mRate as last3mRate
+        from stock_pool a INNER JOIN stock_basic b on a.stock_code = b.stock_code
+        INNER JOIN stock_price_trend c on b.stock_code=c.stock_code
+        where a.status=1
+    </select>
+</mapper>

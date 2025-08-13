@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b704d180-bda2-43fd-8b73-e1dd4f0fc1cc" name="Changes" comment="个股详情">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/HoldingGrowthMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/model/HoldingGrowth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/HoldingGrowthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/HoldingGrowthMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/strategy/service/SignalService2Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myStrategy.7z" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/XueQiuMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/XueQiuMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/model/SignalResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/model/SignalResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/repository/XueQiuRps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/repository/XueQiuRps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/BusinessService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/LineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/LineService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockTrendCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockTrendCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/XueQiuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/XueQiuService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/XueQiuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/XueQiuMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/stock-chart.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/stock-chart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/controller/StockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/controller/StockController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/mapper/PriceTrendMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/mapper/PriceTrendMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/SignalResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/SignalResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockDailyVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockDailyVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockTrend.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockTrend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/BusinessService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/IndustryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/IndustryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/SignalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/SignalService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/StockTrendCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/StockTrendCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/TopicStockSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/TopicStockSelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/XueQiuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/XueQiuService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/mapper/PriceTrendMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/mapper/PriceTrendMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stock.html" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stock.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stockTrend.html" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stockTrend.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/test/java/com/strategy/service/XueQiuServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/test/java/com/strategy/service/XueQiuServiceTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="HTML File" />
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\maven\lib" />
+        <option name="userSettingsFile" value="D:\maven\apache-maven-3.9.6\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="#JAVA_HOME" />
+        <option name="vmOptionsForImporter" value="-XX:+EnableDynamicAgentLoading" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2z7iN59dBaSh2WSGeLRCKCr8NOb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.StockApplication.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JUnit.IndustryServiceTest.industry.executor": "Run",
+    "JUnit.IndustryServiceTest.thsIndustry.executor": "Run",
+    "JUnit.LowPositionFilterServiceTest.filter.executor": "Run",
+    "JUnit.LowPositionFilterServiceTest.test.executor": "Run",
+    "JUnit.MaLineServiceTest.makeAllTradeDateLine.executor": "Run",
+    "JUnit.MaLineServiceTest.makeLines.executor": "Run",
+    "JUnit.MaLineServiceTest.syncMakeLines.executor": "Run",
+    "JUnit.SignalService2Test.main.executor": "Debug",
+    "JUnit.SignalServiceTest.main.executor": "Run",
+    "JUnit.StockTrendCalculatorTest.calculator.executor": "Run",
+    "JUnit.StockTrendCalculatorTest.isInTrend.executor": "Run",
+    "JUnit.StockTrendCalculatorTest.testPriceRange.executor": "Run",
+    "JUnit.TopicStockSelectorTest.init.executor": "Run",
+    "JUnit.XueQiuServiceTest.executor": "Run",
+    "JUnit.XueQiuServiceTest.szzs.executor": "Run",
+    "JUnit.XueQiuServiceTest.testCookie.executor": "Debug",
+    "JUnit.XueQiuServiceTest.testEachDayData.executor": "Debug",
+    "JUnit.XueQiuServiceTest.testGetEachDayData.executor": "Run",
+    "JUnit.XueQiuServiceTest.testGetTradeDayData.executor": "Run",
+    "JUnit.XueQiuServiceTest.testQuery.executor": "Run",
+    "JUnit.XueQiuServiceTest.timeStamp.executor": "Run",
+    "JUnit.XueQiuServiceTest.upsert.executor": "Debug",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.myStrategy [clean].executor": "Run",
+    "Maven.myStrategy [compile].executor": "Run",
+    "Maven.myStrategy [package].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/stock/myStrategy/src/main/resources/mapper",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.41034484",
+    "settings.editor.selected.configurable": "editor.preferences.completion"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\stock\myStrategy\src\main\resources\mapper" />
+      <recent name="D:\stock\myStrategy\src\main\resources\templates" />
+      <recent name="D:\stock\myStrategy\src\main\java\com\strategy" />
+      <recent name="D:\stock\myStrategy" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\stock\myStrategy\src\main\resources" />
+      <recent name="D:\stock\myStrategy\src\main\resources\static\templates" />
+      <recent name="D:\stock\myStrategy\src\main\resources\com\strategy" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.strategy.service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.strategy.mapper" />
+      <recent name="com.strategy.service" />
+      <recent name="com.strategy.repository" />
+      <recent name="com.strategy.model" />
+      <recent name="com.strategy" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.StockApplication">
+    <configuration name="StockApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.strategy.StockApplication" />
+      <module name="myStrategy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.strategy.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MaLineServiceTest.makeLines" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="myStrategy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.strategy.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.strategy.service" />
+      <option name="MAIN_CLASS_NAME" value="com.strategy.service.MaLineServiceTest" />
+      <option name="METHOD_NAME" value="makeLines" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SignalService2Test.main" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="myStrategy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.strategy.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.strategy.service" />
+      <option name="MAIN_CLASS_NAME" value="com.strategy.service.SignalService2Test" />
+      <option name="METHOD_NAME" value="main" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StockTrendCalculatorTest.calculator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="myStrategy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.strategy.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.strategy.service" />
+      <option name="MAIN_CLASS_NAME" value="com.strategy.service.StockTrendCalculatorTest" />
+      <option name="METHOD_NAME" value="calculator" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicStockSelectorTest.init" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="myStrategy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.strategy.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.strategy.service" />
+      <option name="MAIN_CLASS_NAME" value="com.strategy.service.TopicStockSelectorTest" />
+      <option name="METHOD_NAME" value="init" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.StockApplication" />
+        <item itemvalue="JUnit.SignalService2Test.main" />
+        <item itemvalue="JUnit.TopicStockSelectorTest.init" />
+        <item itemvalue="JUnit.StockTrendCalculatorTest.calculator" />
+        <item itemvalue="JUnit.MaLineServiceTest.makeLines" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b704d180-bda2-43fd-8b73-e1dd4f0fc1cc" name="Changes" comment="" />
+      <created>1751088471452</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751088471452</updated>
+    </task>
+    <task id="LOCAL-00001" summary="test1">
+      <option name="closed" value="true" />
+      <created>1754229618545</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754229618545</updated>
+    </task>
+    <task id="LOCAL-00002" summary="commit">
+      <option name="closed" value="true" />
+      <created>1754229726068</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1754229726068</updated>
+    </task>
+    <task id="LOCAL-00003" summary="个股详情">
+      <option name="closed" value="true" />
+      <created>1754229821452</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754229821452</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="test" />
+    <MESSAGE value="commit" />
+    <MESSAGE value="个股详情" />
+    <option name="LAST_COMMIT_MESSAGE" value="个股详情" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/helper/http/ResponseAssertHelper.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/core/variable/ScanVariable.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/StrongStockFilterStrategy.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="124" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>94</line>
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>109</line>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>117</line>
+          <option name="timeStamp" value="149" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java</url>
+          <line>209</line>
+          <option name="timeStamp" value="150" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/task/EasyCrawl.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="152" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/core/agent/GenericHttp1Agent.java</url>
+          <line>151</line>
+          <option name="timeStamp" value="153" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>82</line>
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="itr.getStockCode().equals(&quot;SZ300205&quot;)" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java</url>
+          <line>102</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java</url>
+          <line>73</line>
+          <option name="timeStamp" value="166" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java</url>
+          <line>113</line>
+          <option name="timeStamp" value="174" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java</url>
+          <line>84</line>
+          <option name="timeStamp" value="177" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

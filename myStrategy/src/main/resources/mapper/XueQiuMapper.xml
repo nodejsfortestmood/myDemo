@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.XueQiuMapper">
+    <insert id="upsert" parameterType="com.strategy.model.StockBasic">
+        INSERT INTO stock_basic
+        (stock_code, stock_name, market_type, industry, listing_date, total_shares, circulating_shares, is_st, status, create_time, update_time,company_id,industry_id)
+        VALUES
+        (#{stockCode}, #{stockName}, #{marketType}, #{industry}, #{listingDate}, #{totalShares}, #{circulatingShares}, #{isSt}, #{status}, NOW(), NOW(),#{companyId},#{industryId})
+        ON DUPLICATE KEY UPDATE
+        stock_name = #{stockName},
+        market_type = #{marketType},
+        industry = #{industry},
+        listing_date = #{listingDate},
+        total_shares = #{totalShares},
+        circulating_shares = #{circulatingShares},
+        is_st = #{isSt},
+        status = #{status},
+        update_time = NOW(),
+        company_id=#{companyId},
+        industry_id=#{industryId}
+
+    </insert>
+
+
+    <insert id="updateStockDaily" parameterType="list">
+        INSERT INTO stock_daily (
+        stock_code,
+        trade_date,
+        open_price,
+        close_price,
+        high_price,
+        low_price,
+        volume,
+        amount,
+        chg,
+        percent,
+        turnoverrate
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.stockCode}, #{item.tradeDate}, #{item.openPrice}, #{item.closePrice},
+            #{item.highPrice}, #{item.lowPrice}, #{item.volume}, #{item.amount},
+           #{item.chg},#{item.percent},#{item.turnoverrate})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        open_price = VALUES(open_price),
+        close_price = VALUES(close_price),
+        high_price = VALUES(high_price),
+        low_price = VALUES(low_price),
+        volume = VALUES(volume),
+        amount = VALUES(amount),
+        chg = VALUES(chg),
+        percent = VALUES(percent),
+        turnoverrate = VALUES(turnoverrate),
+        update_time = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="getStocks" resultType="com.strategy.model.StockDaily">
+        select * from stock_daily where stock_code=#{stockCode}
+
+    </select>
+
+    <select id="getStock" resultType="com.strategy.model.StockDaily">
+        select * from stock_daily where stock_code=#{stockCode} and trade_date <![CDATA[=]]> #{tradeDate}
+
+    </select>
+
+    <select id="getDailyByCode" resultType="com.strategy.model.StockDaily">
+        SELECT * FROM stock_daily
+        <where>
+            <if test="stockCode != null and stockCode != ''">
+                stock_code = #{stockCode}
+            </if>
+            <if test="tradeDate != null">
+                 and trade_date <![CDATA[<=]]> #{tradeDate}
+            </if>
+        </where>
+        ORDER BY trade_date DESC
+    </select>
+    <select id="geBasicStocks" resultType="com.strategy.model.StockBasic">
+        select * from stock_basic
+    </select>
+
+    <update id="batchUpdateMaValues" parameterType="list">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE stock_daily
+            SET
+            <if test="item.ma5 != null">ma5 = #{item.ma5},</if>
+            <if test="item.ma10 != null">ma10 = #{item.ma10},</if>
+            <if test="item.ma20 != null">ma20 = #{item.ma20},</if>
+            <if test="item.ma30 != null">ma30 = #{item.ma30},</if>
+            <if test="item.ma60 != null">ma60 = #{item.ma60},</if>
+            <if test="item.amt5 != null">amt5 = #{item.amt5},</if>
+            <if test="item.amt10 != null">amt10 = #{item.amt10},</if>
+            <if test="item.amt20 != null">amt20 = #{item.amt20},</if>
+            <if test="item.amt30 != null">amt30 = #{item.amt30},</if>
+            <if test="item.amt60 != null">amt60 = #{item.amt60},</if>
+            <if test="item.volume5 != null">volume5 = #{item.volume5},</if>
+            <if test="item.volume10 != null">volume10 = #{item.volume10},</if>
+            <if test="item.volume20 != null">volume20 = #{item.volume20},</if>
+            <if test="item.volume30 != null">volume30 = #{item.volume30},</if>
+            <if test="item.volume60 != null">volume60 = #{item.volume60},</if>
+            <if test="item.turnoverrate5 != null">turnoverrate5 = #{item.turnoverrate5},</if>
+            <if test="item.turnoverrate10 != null">turnoverrate10 = #{item.turnoverrate10},</if>
+            <if test="item.turnoverrate20 != null">turnoverrate20 = #{item.turnoverrate20},</if>
+            <if test="item.turnoverrate30 != null">turnoverrate30 = #{item.turnoverrate30},</if>
+            <if test="item.turnoverrate60 != null">turnoverrate60 = #{item.turnoverrate60},</if>
+            update_time = NOW(),ok=1
+            WHERE stock_code = #{item.stockCode} AND trade_date = #{item.tradeDate}
+        </foreach>
+    </update>
+
+    <insert id="batchInsertOrUpdateStockTrend" parameterType="list">
+        INSERT INTO stock_price_trend (
+        stock_code, stock_name, industry,
+        percent, percent5, percent10, percent15, percent20,percent25,
+        percent30,percent35,percent40,percent45,percent50,percent60,
+        trade_date5, trade_date10, trade_date15,trade_date20,trade_date25,
+        trade_date30,trade_date35,trade_date40,trade_date45,trade_date50,trade_date60,
+        create_time, update_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.stockCode}, #{item.stockName}, #{item.industry},
+            #{item.percent}, #{item.percent5}, #{item.percent10}, #{item.percent15},
+            #{item.percent20}, #{item.percent25},#{item.percent30},#{item.percent35},
+            #{item.percent40},#{item.percent45},#{item.percent50},#{item.percent60},
+            #{item.tradeDate5}, #{item.tradeDate10}, #{item.tradeDate15}, #{item.tradeDate20},
+            #{item.tradeDate25},#{item.tradeDate30},#{item.tradeDate35},#{item.tradeDate40},
+            #{item.tradeDate45},#{item.tradeDate50}, #{item.tradeDate60},
+            NOW(), NOW()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        stock_name = VALUES(stock_name),
+        industry = VALUES(industry),
+        percent = VALUES(percent),
+        percent5 = VALUES(percent5),
+        percent10 = VALUES(percent10),
+        percent15 = VALUES(percent15),
+        percent20 = VALUES(percent20),
+        percent25 = VALUES(percent25),
+        percent30 = VALUES(percent30),
+        percent35 = VALUES(percent35),
+        percent40 = VALUES(percent40),
+        percent45 = VALUES(percent45),
+        percent50 = VALUES(percent50),
+        percent60 = VALUES(percent60),
+        trade_date5 = VALUES(trade_date5),
+        trade_date10 = VALUES(trade_date10),
+        trade_date15 = VALUES(trade_date15),
+        trade_date20 = VALUES(trade_date20),
+        trade_date30 = VALUES(trade_date30),
+        trade_date45 = VALUES(trade_date45),
+        trade_date50 = VALUES(trade_date50),
+        trade_date60 = VALUES(trade_date60),
+        update_time = NOW()
+    </insert>
+
+    <insert id="upsertCompany" parameterType="com.strategy.model.Company">
+        INSERT INTO company (
+        classi_name,
+        provincial_name,
+        listed_date,
+        main_operation_business,
+        org_name_cn,
+        actual_controller,
+        create_time,
+        update_time
+        ) VALUES (
+        #{classiName},
+        #{provincialName},
+        #{listedDate},
+        #{mainOperationBusiness},
+        #{orgNameCn},
+        #{actualController},
+        NOW(),
+        NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+        classi_name = VALUES(classi_name),
+        provincial_name = VALUES(provincial_name),
+        listed_date = VALUES(listed_date),
+        main_operation_business = VALUES(main_operation_business),
+        actual_controller = VALUES(actual_controller),
+        update_time = NOW()
+    </insert>
+
+    <select id="getDailyByDate" resultType="com.strategy.model.StockDaily">
+        SELECT * FROM stock_daily
+        <where>
+            <if test="tradeDate != null">
+                and trade_date <![CDATA[=]]> #{tradeDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="hasDailyByDate" resultType="int">
+        SELECT count(1) FROM stock_daily
+        <where>
+            <if test="stockCode != null and stockCode != ''">
+                stock_code = #{stockCode}
+            </if>
+            <if test="tradeDate != null">
+                and trade_date <![CDATA[=]]> #{tradeDate}
+            </if>
+        </where>
+    </select>
+    <select id="getStockBasicInfo" resultType="com.strategy.model.StockBasic">
+        select * from stock_basic where stock_code = #{stockCode}
+    </select>
+    <select id="selectByCode" resultType="com.strategy.model.StockDaily">
+        SELECT * FROM stock_daily
+        WHERE stock_code = #{stockCode}
+        ORDER BY trade_date DESC
+        LIMIT #{limit}
+    </select>
+    <select id="selectByCodeAndDateRange" resultType="com.strategy.model.StockDaily">
+        SELECT * FROM stock_daily
+        WHERE stock_code = #{stockCode}
+        AND trade_date BETWEEN #{startDate} AND #{endDate}
+        ORDER BY trade_date ASC
+    </select>
+    <select id="getLastNTradingDays" resultType="java.time.LocalDate">
+        SELECT trade_date
+        FROM stock_daily
+        WHERE
+        stock_code = #{stockCode} and
+        trade_date <![CDATA[<=]]> #{endDate}
+        ORDER BY trade_date DESC
+        LIMIT #{days}
+    </select>
+</mapper>

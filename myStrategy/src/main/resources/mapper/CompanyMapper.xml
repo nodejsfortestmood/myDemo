@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.CompanyMapper">
+    <insert id="upsertCompany" parameterType="com.strategy.model.Company" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO company (
+        classi_name,
+        provincial_name,
+        listed_date,
+        main_operation_business,
+        org_name_cn,
+        actual_controller,
+        create_time,
+        update_time
+        ) VALUES (
+        #{classiName},
+        #{provincialName},
+        #{listedDate},
+        #{mainOperationBusiness},
+        #{orgNameCn},
+        #{actualController},
+        NOW(),
+        NOW()
+        )
+    </insert>
+    <select id="getCompany" resultType="com.strategy.model.Company">
+        select * from Company where org_name_cn = #{orgNameCn}
+    </select>
+</mapper>

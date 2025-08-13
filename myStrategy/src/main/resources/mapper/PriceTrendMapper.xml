@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.PriceTrendMapper">
+    <insert id="batchInsertOrUpdateStockTrend" parameterType="list">
+        INSERT INTO stock_price_trend (
+        stock_code, stock_name, industry,
+        percent,percent2,percent3,percent4, percent5,percent6, percent7,percent8,
+        percent9,percent10, percent15, percent20,percent25,
+        percent30,percent35,percent40,percent45,percent50,percent60,
+        percent70,percent90,percent100,percent120,percent150,percent170,
+        percent190,percent200,percent230,percent250,monthRate,yearRate,
+        trade_date5, trade_date10, trade_date15,trade_date20,trade_date25,
+        trade_date30,trade_date35,trade_date40,trade_date45,trade_date50,trade_date60,last3mRate,
+        create_time, update_time,month1Rate,month2Rate,month3Rate,month4Rate,month5Rate,month6Rate
+        ,month7Rate,month8Rate,month9Rate,month10Rate,month11Rate,month12Rate
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.stockCode}, #{item.stockName}, #{item.industry},
+            #{item.percent}, #{item.percent2},#{item.percent3},#{item.percent4},
+            #{item.percent5},#{item.percent6},#{item.percent7},#{item.percent8},
+            #{item.percent9}, #{item.percent10}, #{item.percent15}, #{item.percent20},
+            #{item.percent25},#{item.percent30},#{item.percent35},
+            #{item.percent40},#{item.percent45},#{item.percent50},#{item.percent60},
+            #{item.percent70},#{item.percent90},#{item.percent100},#{item.percent120},
+            #{item.percent150},#{item.percent170},#{item.percent190},#{item.percent200},
+            #{item.percent230},#{item.percent250},#{item.monthRate},#{item.yearRate},
+            #{item.tradeDate5}, #{item.tradeDate10}, #{item.tradeDate15}, #{item.tradeDate20},
+            #{item.tradeDate25},#{item.tradeDate30},#{item.tradeDate35},#{item.tradeDate40},
+            #{item.tradeDate45},#{item.tradeDate50}, #{item.tradeDate60},#{item.last3mRate},
+            NOW(), NOW(),#{item.month1Rate},#{item.month2Rate},#{item.month3Rate},#{item.month4Rate},
+            #{item.month5Rate},#{item.month6Rate},#{item.month7Rate},#{item.month8Rate},#{item.month9Rate},
+            #{item.month10Rate},#{item.month11Rate},#{item.month12Rate}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        stock_name = VALUES(stock_name),
+        industry = VALUES(industry),
+        percent = VALUES(percent),
+        percent2 = VALUES(percent2),
+        percent3 = VALUES(percent3),
+        percent4 = VALUES(percent4),
+        percent5 = VALUES(percent5),
+        percent6 = VALUES(percent6),
+        percent7 = VALUES(percent7),
+        percent8 = VALUES(percent8),
+        percent9 = VALUES(percent9),
+        percent10 = VALUES(percent10),
+        percent15 = VALUES(percent15),
+        percent20 = VALUES(percent20),
+        percent25 = VALUES(percent25),
+        percent30 = VALUES(percent30),
+        percent35 = VALUES(percent35),
+        percent40 = VALUES(percent40),
+        percent45 = VALUES(percent45),
+        percent50 = VALUES(percent50),
+        percent60 = VALUES(percent60),
+        percent70 = VALUES(percent70),
+        percent90 = VALUES(percent90),
+        percent100 = VALUES(percent100),
+        percent120 = VALUES(percent120),
+        percent150 = VALUES(percent150),
+        percent170 = VALUES(percent170),
+        percent190 = VALUES(percent190),
+        percent200 = VALUES(percent200),
+        percent230 = VALUES(percent230),
+        percent250 = VALUES(percent250),
+        monthRate = VALUES(monthRate),
+        yearRate = VALUES(yearRate),
+        last3mRate = VALUES(last3mRate),
+        trade_date5 = VALUES(trade_date5),
+        trade_date10 = VALUES(trade_date10),
+        trade_date15 = VALUES(trade_date15),
+        trade_date20 = VALUES(trade_date20),
+        trade_date30 = VALUES(trade_date30),
+        trade_date45 = VALUES(trade_date45),
+        trade_date50 = VALUES(trade_date50),
+        trade_date60 = VALUES(trade_date60),
+        month1Rate = VALUES(month1Rate),
+        month2Rate = VALUES(month2Rate),
+        month3Rate = VALUES(month3Rate),
+        month4Rate = VALUES(month4Rate),
+        month5Rate = VALUES(month5Rate),
+        month6Rate = VALUES(month6Rate),
+        month7Rate = VALUES(month7Rate),
+        month8Rate = VALUES(month8Rate),
+        month9Rate = VALUES(month9Rate),
+        month10Rate = VALUES(month10Rate),
+        month11Rate = VALUES(month11Rate),
+        month12Rate = VALUES(month12Rate),
+        update_time = NOW()
+    </insert>
+    <select id="getTrend" resultType="com.strategy.model.StockTrend">
+        select * from stock_price_trend where stock_code= #{stockCode}
+    </select>
+    <select id="getPriceRange" resultType="com.strategy.model.StockTrend">
+        select * from stock_price_trend where
+        yearRate<![CDATA[<=]]> #{yearRateEnd} and  yearRate<![CDATA[>=]]> #{yearRateStart}
+        order by yearRate asc
+    </select>
+
+    <!-- 批量新增或更新 -->
+    <insert id="batchConceptScoreUpsert" parameterType="java.util.List">
+        INSERT INTO concept_score (
+        concept_name,
+        trade_date,
+        avg_rise,
+        limit_ups,
+        big_vols,
+        turnover_rate,
+        stock_size,
+        score
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.conceptName},
+            #{item.tradeDate},
+            #{item.avgRise},
+            #{item.limitUps},
+            #{item.bigVols},
+            #{item.turnoverRate},
+            #{item.stockSize},
+            #{item.score}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        avg_rise = VALUES(avg_rise),
+        limit_ups = VALUES(limit_ups),
+        big_vols = VALUES(big_vols),
+        turnover_rate = VALUES(turnover_rate),
+        stock_size = VALUES(stock_size),
+        score = VALUES(score),
+        update_time = NOW()
+    </insert>
+
+    <sql id="baseColumns">
+        a.stock_code, a.stock_name, a.industry,
+        percent, percent2,percent3,percent4,percent5,percent6,percent7,percent8, percent9,percent10, percent15, percent20, percent25, percent30,
+        percent35, percent40, percent45, percent50, percent60, percent70, percent90,
+        percent100, percent120, percent150, percent170, percent190, percent200,
+        percent230, percent250, month1Rate,month2Rate,month3Rate,month4Rate,month5Rate,month6Rate,
+        month7Rate,month8Rate,month9Rate,month10Rate,month11Rate,month12Rate,yearrate, last3mrate,
+        trade_date5, trade_date10, trade_date15, trade_date20, trade_date25,
+        trade_date30, trade_date35, trade_date40, trade_date45, trade_date50, trade_date60
+    </sql>
+
+    <select id="selectStockTrends" resultType="com.strategy.model.StockTrend">
+        SELECT DISTINCT
+        <include refid="baseColumns" />
+        FROM stock_price_trend a
+        <where>
+            <if test="search != null and search != ''">
+                AND (
+                a.stock_code LIKE CONCAT('%', #{search}, '%')
+                OR a.stock_name LIKE CONCAT('%', #{search}, '%')
+                OR a.industry LIKE CONCAT('%', #{search}, '%')
+                )
+            </if>
+            <if test="industry != null and industry != ''">
+                AND a.industry = #{industry}
+            </if>
+        </where>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY a.${sortField} ${sortDirection}
+        </if>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countStockTrends" resultType="int">
+        SELECT count(1) FROM stock_price_trend a
+        <where>
+            <if test="search != null and search != ''">
+                AND (
+                a.stock_code LIKE CONCAT('%', #{search}, '%')
+                OR a.stock_name LIKE CONCAT('%', #{search}, '%')
+                OR a.industry LIKE CONCAT('%', #{search}, '%')
+                )
+            </if>
+            <if test="industry != null and industry != ''">
+                AND a.industry = #{industry}
+            </if>
+        </where>
+    </select>
+</mapper>

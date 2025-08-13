@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票趋势数据展示</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 98%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e0e3e7;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th:hover {
+            background-color: #e9ecef;
+        }
+        th.sort-asc::after {
+            content: " ↑";
+            color: #3498db;
+        }
+        th.sort-desc::after {
+            content: " ↓";
+            color: #3498db;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .positive {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        .negative {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+        .neutral {
+            color: #7f8c8d;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            margin: 0 3px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            min-width: 32px;
+        }
+        .pagination button.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .pagination button:hover:not(.active) {
+            background-color: #f1f1f1;
+        }
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #95a5a6;
+            font-size: 14px;
+        }
+        .filter-section {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 13px;
+        }
+        .percent-col {
+            min-width: 70px;
+        }
+        .date-col {
+            min-width: 90px;
+        }
+        .stock-code-col {
+            min-width: 80px;
+        }
+        .stock-name-col {
+            min-width: 100px;
+        }
+        .industry-col {
+            min-width: 120px;
+        }
+        #loading {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        /* 添加在style标签中 */
+        .stock-code-col a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .stock-code-col a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>股票趋势数据展示</h1>
+
+    <div id="loading">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBmaWxsPSIjMzQ5OGRiIiBkPSJNMjUuMjUsNS4xOUMzNC4wNDksNS4xOSA0MS4xMywxMi4yNzEgNDEuMTMsMjEuMDdjMCw4Ljc5OS03LjA4MSwxNS44Ny0xNS44OCwxNS44N3MtMTUuODctNy4wNzEtMTUuODctMTUuODdjMC04Ljc5OSA3LjA3MS0xNS44OCAxNS44Ny0xNS44OHptLTEuMjcsMzMuMDlsLTAuMDEsLTAuMDJjLTAuOTU5LDAuMzA5LTEuOTg0LDAuNDc5LTMuMDU0LDAuNDc5LTUuNDI5LDAtOS44My00LjQwMS05LjgzLTkuODNzNC40MDEtOS44Myw5LjgzLTkuODNjNS40MjksMCw5LjgzLDQuNDAxLDkuODMsOS44M2MwLDIuODA3LTEuMTg0LDUuMzQ0LTMuMDY5LDcuMTMzbC0wLjAxLTAuMDJMMzQuNywzNS4yTDI0Ljk4LDM4LjI4eiI+PC9wYXRoPjwvc3ZnPg==" alt="加载中..." style="height: 30px;">
+        <span style="margin-left: 10px;">数据加载中...</span>
+    </div>
+
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+    <div class="controls">
+        <input type="text" class="search-box" placeholder="搜索股票代码、名称或行业..." id="searchInput">
+
+        <div class="filter-section">
+            <span>每页显示：</span>
+            <select id="pageSize">
+                <option value="10">10条</option>
+                <option value="25" selected>25条</option>
+                <option value="50">50条</option>
+                <option value="100">100条</option>
+            </select>
+
+            <span>行业筛选：</span>
+            <select id="industryFilter">
+                <option value="">全部行业</option>
+                <!-- 行业选项将通过JavaScript动态加载 -->
+            </select>
+        </div>
+    </div>
+
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th class="stock-code-col" data-sort="stockCode">股票代码</th>
+            <th class="stock-name-col" data-sort="stockName">股票名称</th>
+            <th class="industry-col" data-sort="industry">行业</th>
+            <th class="percent-col" data-sort="percent">当前涨幅(%)</th>
+            <th class="percent-col" data-sort="month1Rate">1月涨幅(%)</th>
+            <th class="percent-col" data-sort="month2Rate">2月涨幅(%)</th>
+            <th class="percent-col" data-sort="month3Rate">3月涨幅(%)</th>
+            <th class="percent-col" data-sort="month4Rate">4月涨幅(%)</th>
+            <th class="percent-col" data-sort="month5Rate">5月涨幅(%)</th>
+            <th class="percent-col" data-sort="month6Rate">6月涨幅(%)</th>
+            <th class="percent-col" data-sort="month7Rate">7月涨幅(%)</th>
+            <th class="percent-col" data-sort="month8Rate">8月涨幅(%)</th>
+            <th class="percent-col" data-sort="month9Rate">9月涨幅(%)</th>
+            <th class="percent-col" data-sort="month10Rate">10月涨幅(%)</th>
+            <th class="percent-col" data-sort="month11Rate">11月涨幅(%)</th>
+            <th class="percent-col" data-sort="month12Rate">12月涨幅(%)</th>
+            <th class="percent-col" data-sort="yearRate">年涨幅(%)</th>
+            <th class="percent-col" data-sort="percent5">5日(%)</th>
+            <th class="percent-col" data-sort="percent10">10日(%)</th>
+            <th class="percent-col" data-sort="percent15">15日(%)</th>
+            <th class="percent-col" data-sort="percent20">20日(%)</th>
+            <th class="percent-col" data-sort="percent25">25日(%)</th>
+            <th class="percent-col" data-sort="percent30">30日(%)</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- 数据将通过JavaScript动态加载 -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination">
+        <!-- 分页按钮将通过JavaScript动态生成 -->
+    </div>
+</div>
+
+<script>
+    // 全局变量
+    let currentData = [];
+    let currentSort = { field: 'stockCode', direction: 'asc' };
+    let currentPage = 1;
+    let pageSize = 25;
+    let currentIndustry = '';
+    let totalRecords = 0;
+
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', function() {
+        loadIndustries();
+        loadData();
+        setupEventListeners();
+    });
+
+    // 从后端加载行业列表
+    function loadIndustries() {
+        fetch('/api/stocks/industries')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应异常');
+                }
+                return response.json();
+            })
+            .then(industries => {
+                const industryFilter = document.getElementById('industryFilter');
+                // 保留"全部行业"选项
+                while (industryFilter.options.length > 1) {
+                    industryFilter.remove(1);
+                }
+
+                industries.forEach(industry => {
+                    const option = document.createElement('option');
+                    option.value = industry;
+                    option.textContent = industry;
+                    industryFilter.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('加载行业列表失败:', error);
+                showError('加载行业列表失败: ' + error.message);
+            });
+    }
+
+    // 从后端加载数据
+    function loadData() {
+        showLoading();
+        hideError();
+
+        const searchTerm = document.getElementById('searchInput').value;
+        const params = new URLSearchParams({
+            search: searchTerm || '',
+            industry: currentIndustry || '',
+            sortField: currentSort.field,
+            sortDirection: currentSort.direction,
+            page: currentPage,
+            size: pageSize
+        });
+
+        fetch(`/api/stocks/trends?${params.toString()}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应异常');
+                }
+                return response.json();
+            })
+            .then(data => {
+                currentData = data.data;
+                totalRecords = data.total;
+                renderTable();
+                renderPagination(data.totalPages);
+            })
+            .catch(error => {
+                console.error('加载数据失败:', error);
+                showError('加载数据失败: ' + error.message);
+                document.getElementById('tableBody').innerHTML =
+                    '<tr><td colspan="15" class="no-data">加载数据失败，请稍后重试</td></tr>';
+            })
+            .finally(() => {
+                hideLoading();
+            });
+    }
+
+    // 排序数据
+    function sortData(field) {
+        // 如果点击的是已经排序的字段，则切换排序方向
+        if (currentSort.field === field) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.field = field;
+            currentSort.direction = 'asc';
+        }
+
+        // 更新UI
+        document.querySelectorAll('th').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+        });
+
+        const currentTh = document.querySelector(`th[data-sort="${field}"]`);
+        if (currentTh) {
+            currentTh.classList.add(`sort-${currentSort.direction}`);
+        }
+
+        // 重新加载数据
+        currentPage = 1;
+        loadData();
+    }
+
+    // 过滤数据
+    function filterData(searchTerm, industry) {
+        currentIndustry = industry || '';
+        currentPage = 1;
+        loadData();
+    }
+
+    // 渲染表格
+    function renderTable() {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+
+        if (currentData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="15" class="no-data">没有找到匹配的数据</td></tr>';
+        } else {
+            currentData.forEach(item => {
+                const row = document.createElement('tr');
+                // 基础信息
+                row.innerHTML = `
+                    <td>
+                    <a href="/stock-chart?code=${item.stockCode}"
+                       target="_blank"
+                       title="查看${item.stockName}的K线图"
+                       style="color: #3498db; text-decoration: none;">
+                        ${item.stockCode || '-'}
+                    </a>
+                    </td>
+                    <td>${item.stockName || '-'}</td>
+                    <td>${item.industry || '-'}</td>
+                `;
+
+                // 百分比数据 - 添加颜色样式
+                const percentFields = [
+                    'percent','month1Rate','month2Rate','month3Rate',
+                     'month4Rate','month5Rate','month6Rate','month7Rate','month8Rate',
+                     'month9Rate','month10Rate','month11Rate','month12Rate','yearRate',
+                     'percent5', 'percent10', 'percent15', 'percent20',
+                    'percent25', 'percent30'
+                ];
+
+                percentFields.forEach(field => {
+                    const value = item[field];
+                    const cell = document.createElement('td');
+                    cell.textContent = value !== undefined && value !== null ? value.toFixed(2) : '-';
+
+                    if (value > 0) {
+                        cell.className = 'positive';
+                    } else if (value < 0) {
+                        cell.className = 'negative';
+                    } else {
+                        cell.className = 'neutral';
+                    }
+
+                    row.appendChild(cell);
+                });
+
+<!--                // 日期数据-->
+<!--                const dateFields = ['tradeDate5', 'tradeDate10', 'tradeDate15'];-->
+<!--                dateFields.forEach(field => {-->
+<!--                    const cell = document.createElement('td');-->
+<!--                    cell.textContent = item[field] ? formatDate(item[field]) : '-';-->
+<!--                    row.appendChild(cell);-->
+<!--                });-->
+
+                tableBody.appendChild(row);
+            });
+        }
+    }
+
+    // 渲染分页
+    function renderPagination(totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        if (totalPages <= 1) return;
+
+        // 上一页按钮
+        const prevButton = document.createElement('button');
+        prevButton.textContent = '上一页';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadData();
+            }
+        });
+        pagination.appendChild(prevButton);
+
+        // 页码按钮
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // 第一页
+        if (startPage > 1) {
+            const firstButton = document.createElement('button');
+            firstButton.textContent = '1';
+            firstButton.addEventListener('click', () => {
+                currentPage = 1;
+                loadData();
+            });
+            pagination.appendChild(firstButton);
+
+            if (startPage > 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '8px 12px';
+                pagination.appendChild(ellipsis);
+            }
+        }
+
+        // 中间页码
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                loadData();
+            });
+            pagination.appendChild(pageButton);
+        }
+
+        // 最后一页
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '8px 12px';
+                pagination.appendChild(ellipsis);
+            }
+
+            const lastButton = document.createElement('button');
+            lastButton.textContent = totalPages;
+            lastButton.addEventListener('click', () => {
+                currentPage = totalPages;
+                loadData();
+            });
+            pagination.appendChild(lastButton);
+        }
+
+        // 下一页按钮
+        const nextButton = document.createElement('button');
+        nextButton.textContent = '下一页';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadData();
+            }
+        });
+        pagination.appendChild(nextButton);
+    }
+
+    // 设置事件监听
+    function setupEventListeners() {
+        // 表头点击排序
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', function() {
+                const field = this.getAttribute('data-sort');
+                sortData(field);
+            });
+        });
+
+        // 搜索框输入（防抖处理）
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                filterData(this.value, currentIndustry);
+            }, 500);
+        });
+
+        // 分页大小变化
+        document.getElementById('pageSize').addEventListener('change', function() {
+            pageSize = parseInt(this.value);
+            currentPage = 1;
+            loadData();
+        });
+
+        // 行业筛选变化
+        document.getElementById('industryFilter').addEventListener('change', function() {
+            currentIndustry = this.value;
+            filterData(document.getElementById('searchInput').value, currentIndustry);
+        });
+    }
+
+    // 辅助函数：格式化日期
+    function formatDate(dateStr) {
+        if (!dateStr) return '-';
+        try {
+            const date = new Date(dateStr);
+            return date.toISOString().split('T')[0];
+        } catch (e) {
+            return dateStr; // 如果已经是格式化好的日期字符串
+        }
+    }
+
+    // 显示加载指示器
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    // 隐藏加载指示器
+    function hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    // 显示错误信息
+    function showError(message) {
+        const errorElement = document.getElementById('errorMessage');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+
+    // 隐藏错误信息
+    function hideError() {
+        document.getElementById('errorMessage').style.display = 'none';
+    }
+</script>
+</body>
+</html>
