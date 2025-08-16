@@ -73,4 +73,5 @@ public class XueQiuRps {
         allBasicStock.forEach(itr->codeMap.put(itr.getStockCode(),itr.getStockName()));
         return codeMap;
     }
+
 }

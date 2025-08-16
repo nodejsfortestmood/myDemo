@@ -61,6 +61,17 @@ public class IndustryService {
         }
 
     }
+    public void updateConcept(String stockCode) {
+        StockBasic stockBasic = service.getStockByCode(stockCode);
+        Map<String, String> cookies = getCookies();
+        boolean upToday = conceptRps.isUpToday(stockCode);
+        if(upToday) {
+            log.info("stock={} has update concept today",upToday);
+            return;
+        }
+        List<ThsConcept> thsConcepts = getThsConcepts(stockCode,cookies);
+        saveConcept(thsConcepts,stockBasic);
+    }
     @Scheduled(cron = "0 39 19 * * ?")
     public void thsIndustry() {
         List<StockBasic> stocks = service.getAllBasicStock();

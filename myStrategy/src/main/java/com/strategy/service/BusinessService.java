@@ -18,7 +18,7 @@ public class BusinessService {
         this.lineService = lineService;
         this.stockTrendCalculator = stockTrendCalculator;
     }
-    @Scheduled(cron = "0 34 21 * * ?")
+    @Scheduled(cron = "0 26 11 * * ?")
     @Retryable(value = {RuntimeException.class},
             maxAttempts = 100,
             backoff = @Backoff(delay = 1000))

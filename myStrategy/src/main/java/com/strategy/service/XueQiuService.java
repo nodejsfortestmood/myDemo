@@ -68,7 +68,7 @@ public class XueQiuService {
     public void init() {
         // symbol=SH600519&begin=1672502400000
         String referer = "https://xueqiu.com/hq/screener";
-        String apiurl = "https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${symbol}&begin=${begin}&period=day&type=before&count=-1&indicator=kline,pe,pb,ps,pcf,market_capital";
+        String apiurl = "https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${symbol}&begin=${begin}&period=day&type=before&count=-4&indicator=kline,pe,pb,ps,pcf,market_capital";
         List<StockBasic> stocks = getAllBasicStock();
         Map<String, Object> args = new HashMap<>(2);
         long begin = System.currentTimeMillis();
@@ -82,7 +82,7 @@ public class XueQiuService {
             List<StockDaily> stockDailies = getStockTradeDay(stockCode);
             if (!stockDailies.isEmpty() && stockDailies.get(0).getChg() != null) {
                 log.info("continue,stockCode={}", stockCode);
-                continue;
+//                continue;
             }
             args.put("symbol", stockCode);
             args.put("begin", begin);
@@ -227,6 +227,8 @@ public class XueQiuService {
      * @return K线数据列表
      */
     public List<StockDailyVo> getKlineData(String stockCode, int days) {
+        // 懒加载策略，查询K线数据时，直接把最新的K线数据取回来，再算MA5-60数据
+
         // 参数校验
         if (StringUtils.isBlank(stockCode)) {
             throw new IllegalArgumentException("股票代码不能为空");
@@ -289,5 +291,9 @@ public class XueQiuService {
         vo.setMa10(daily.getMa10());
         vo.setMa20(daily.getMa20());
         return vo;
+    }
+
+    public StockBasic getStockByCode(String stockCode){
+        return xueQiuRps.getStockBasicInfo(stockCode);
     }
 }

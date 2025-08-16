@@ -4,47 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b704d180-bda2-43fd-8b73-e1dd4f0fc1cc" name="Changes" comment="个股详情">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/HoldingGrowthMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/model/HoldingGrowth.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/HoldingGrowthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/HoldingGrowthMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/strategy/service/SignalService2Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../myStrategy.7z" beforeDir="false" />
+    <list default="true" id="b704d180-bda2-43fd-8b73-e1dd4f0fc1cc" name="Changes" comment="sql">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/controller/StockConceptController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/strategy/model/vo/StockConceptVo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/XueQiuMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/XueQiuMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/model/SignalResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/model/SignalResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/ConceptMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/mapper/ConceptMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/repository/ConceptRps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/repository/ConceptRps.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/repository/XueQiuRps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/repository/XueQiuRps.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/BusinessService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/LineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/LineService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockTrendCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockTrendCalculator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockConceptService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/StockConceptService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/strategy/service/XueQiuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/strategy/service/XueQiuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/XueQiuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/XueQiuMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/ConceptMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/ConceptMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/stock-chart.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/stock-chart.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/controller/StockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/controller/StockController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/mapper/PriceTrendMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/mapper/PriceTrendMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/SignalResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/SignalResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockDailyVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockDailyVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockTrend.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/model/StockTrend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/BusinessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/BusinessService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/IndustryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/IndustryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/SignalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/SignalService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/StockTrendCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/StockTrendCalculator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/TopicStockSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/TopicStockSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/XueQiuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/java/com/strategy/service/XueQiuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/mapper/PriceTrendMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/mapper/PriceTrendMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stock.html" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stock.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stockTrend.html" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/main/resources/templates/stockTrend.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../work/myStrategy/src/test/java/com/strategy/service/XueQiuServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../work/myStrategy/src/test/java/com/strategy/service/XueQiuServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,8 +97,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/stock/myStrategy/src/main/resources/mapper",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/myDemo/myStrategy/src/main/resources/data",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.41034484",
@@ -135,6 +107,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\myDemo\myStrategy\src\main\resources\data" />
       <recent name="D:\stock\myStrategy\src\main\resources\mapper" />
       <recent name="D:\stock\myStrategy\src\main\resources\templates" />
       <recent name="D:\stock\myStrategy\src\main\java\com\strategy" />
@@ -152,11 +125,11 @@
       <recent name="com.strategy.service" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.strategy.controller" />
       <recent name="com.strategy.mapper" />
       <recent name="com.strategy.service" />
       <recent name="com.strategy.repository" />
       <recent name="com.strategy.model" />
-      <recent name="com.strategy" />
     </key>
   </component>
   <component name="RunManager" selected="Application.StockApplication">
@@ -279,14 +252,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754229821452</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="sql">
+      <option name="closed" value="true" />
+      <created>1755120444048</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1755120444048</updated>
+    </task>
+    <task id="LOCAL-00005" summary="sql">
+      <option name="closed" value="true" />
+      <created>1755120882703</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1755120882703</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
     <MESSAGE value="commit" />
     <MESSAGE value="个股详情" />
-    <option name="LAST_COMMIT_MESSAGE" value="个股详情" />
+    <MESSAGE value="sql" />
+    <option name="LAST_COMMIT_MESSAGE" value="sql" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -307,38 +297,13 @@
           <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
-          <line>94</line>
-          <option name="timeStamp" value="138" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
-          <line>109</line>
-          <option name="timeStamp" value="147" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
-          <line>117</line>
-          <option name="timeStamp" value="149" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/com/strategy/service/XueQiuServiceTest.java</url>
           <line>209</line>
           <option name="timeStamp" value="150" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/task/EasyCrawl.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="152" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/core/agent/GenericHttp1Agent.java</url>
-          <line>151</line>
-          <option name="timeStamp" value="153" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
-          <line>82</line>
+          <line>93</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -346,11 +311,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/TopicStockSelector.java</url>
           <line>102</line>
           <option name="timeStamp" value="155" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/controller/StockController.java</url>
-          <line>73</line>
-          <option name="timeStamp" value="166" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java</url>
@@ -361,6 +321,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/SignalService2.java</url>
           <line>84</line>
           <option name="timeStamp" value="177" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="178" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/strategy/service/IndustryService.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="180" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

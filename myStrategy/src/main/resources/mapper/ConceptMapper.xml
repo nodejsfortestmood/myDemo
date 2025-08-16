@@ -59,4 +59,12 @@
     <select id="hasConcept" resultType="java.lang.Integer">
         select count(1) from stock_concept_relation where stock_code = #{stockCode}
     </select>
+    <select id="getStockConcept" resultType="com.strategy.model.vo.StockConceptVo">
+        SELECT concept_name as name, conceptLeadingStocks,conceptFullDesc as description
+        from stock_concept_relation WHERE stock_code =#{stockCode} order by id
+    </select>
+    <select id="getLatestDay" resultType="java.time.LocalDate">
+        SELECT create_time
+        from stock_concept_relation WHERE stock_code =#{stockCode} limit 1
+    </select>
 </mapper>

@@ -5,9 +5,11 @@ import com.strategy.model.Concept;
 import com.strategy.model.ConceptRelation;
 import com.strategy.model.StockDto;
 import com.strategy.model.ThsConcept;
+import com.strategy.model.vo.StockConceptVo;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -58,5 +60,14 @@ public class ConceptRps {
 
     public int hasConcept(String stockCode){
         return conceptMapper.hasConcept(stockCode);
+    }
+
+    public List<StockConceptVo> getStockConcept(String stockCode){
+        return conceptMapper.getStockConcept(stockCode);
+    }
+
+    public boolean isUpToday(String stockCode) {
+        LocalDate latestDay = conceptMapper.getLatestDay(stockCode);
+        return LocalDate.now().equals(latestDay);
     }
 }
