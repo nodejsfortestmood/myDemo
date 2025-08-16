@@ -1,0 +1,323 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    padding: 10px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+}
+
+.stock-info {
+    display: flex;
+    align-items: baseline;
+    gap: 10x;
+}
+
+.stock-code {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.stock-name {
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+.price-info {
+    text-align: right;
+}
+
+.current-price {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.price-change {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.positive {
+    color: #f44336;
+}
+
+.negative {
+    color: #4CAF50;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+}
+
+.tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.tab:hover {
+    background: #f0f0f0;
+}
+
+.tab.active {
+    border-bottom: 2px solid #3498db;
+    color: #3498db;
+    font-weight: bold;
+    background: white;
+}
+
+.tab-content {
+    display: none;
+    padding: 0;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.toolbar {
+    display: flex;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.toolbar-btn {
+    padding: 8px 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.toolbar-btn:hover {
+    background: #f0f0f0;
+}
+
+.toolbar-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+#chart-container {
+    padding: 20px;
+    position: relative;
+}
+
+#chart {
+    width: 100%;
+    height: 600px;
+}
+
+.chart-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #3498db;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    margin: 20px;
+}
+
+/* 概念和公司资料样式 */
+.concept-container, .company-container {
+    padding: 20px;
+}
+
+.concept-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.concept-item {
+    padding: 8px 15px;
+    background: #e3f2fd;
+    border-radius: 4px;
+    color: #1976d2;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.concept-item:hover {
+    background: #bbdefb;
+}
+
+.concept-item.active {
+    background: #3498db;
+    color: white;
+}
+
+/* 概念详情样式 */
+.concept-detail {
+    display: none;
+    padding: 15px;
+    background: #f5f7fa;
+    border-radius: 4px;
+    margin-top: 10px;
+    border-left: 3px solid #3498db;
+    width: 100%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.concept-detail.active {
+    display: block;
+}
+
+.concept-detail-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.concept-detail-content {
+    line-height: 1.6;
+    color: #555;
+}
+
+/* 公司资料样式 */
+.company-info {
+    margin-top: 20px;
+}
+
+.info-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.info-content {
+    line-height: 1.6;
+    color: #333;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 新增概念详情样式 */
+.concept-detail {
+    display: none;
+    padding: 15px;
+    background: #f5f7fa;
+    border-radius: 4px;
+    margin-top: 10px;
+    border-left: 3px solid #3498db;
+}
+
+.concept-detail.active {
+    display: block;
+}
+
+.concept-detail-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.concept-detail-content {
+    line-height: 1.6;
+    color: #555;
+}
+
+.concept-item.active {
+    background: #3498db;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .price-info {
+        text-align: left;
+        width: 100%;
+    }
+
+    #chart {
+        height: 500px;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .concept-list {
+        flex-direction: column;
+    }
+}
