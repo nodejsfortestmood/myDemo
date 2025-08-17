@@ -43,6 +43,16 @@
         )
     </insert>
     <delete id="delThsCompany">
-        delete from company_info where stock_code=#｛stockCode｝
+        delete from company_info where stock_code = #{stockCode}
     </delete>
+    <select id="getLatestDay" resultType="java.time.LocalDate">
+        SELECT
+        COALESCE(
+        (SELECT upDay FROM company_info WHERE stock_code=#{stockCode}),
+        CAST('1970-01-01' AS DATE) -- 或其他默认值
+        ) AS upDay
+    </select>
+    <select id="getCompany" resultType="com.strategy.model.CompanyInfo">
+        select * from company_info  where stock_code = #{stockCode}
+    </select>
 </mapper>

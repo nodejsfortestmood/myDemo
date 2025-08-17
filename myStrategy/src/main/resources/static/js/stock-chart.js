@@ -249,7 +249,6 @@
       function loadConceptData() {
           const conceptList = document.getElementById('conceptList');
           conceptList.innerHTML = '<div class="loading-spinner"></div>';
-
           // 调用后端API获取概念数据
           fetch(`/api/stock/concept/${stockCode}`)
               .then(response => {
@@ -318,51 +317,127 @@
     function loadCompanyData() {
         const companyInfo = document.getElementById('companyInfo');
         companyInfo.innerHTML = '<div class="loading-spinner"></div>';
+        // 这里替换为您的实际API端点
+        fetch(`/api/stock/company/${stockCode}`)
+            .then(response => {
+                if (!response.ok) throw new Error('网络响应不正常');
+                return response.json();
+            })
+            .then(data => {
+                renderCompanyData(data);
+            })
+            .catch(error => {
+            });
+    }
 
-        // 模拟API请求
-        setTimeout(() => {
-            // 这里应该是从API获取数据，这里用模拟数据
-            const mockData = {
-                companyName: "某某科技股份有限公司",
-                establishDate: "2010年5月20日",
-                registeredCapital: "5亿元人民币",
-                legalRepresentative: "张三",
-                mainBusiness: "人工智能、大数据、云计算技术的研发与应用",
-                address: "北京市海淀区科技园路88号",
-                introduction: "某某科技是一家专注于人工智能和大数据技术的高科技企业，致力于为企业提供智能化解决方案。公司拥有多项自主知识产权，在行业内处于领先地位。"
-            };
+    function renderCompanyData(data) {
+        const companyInfo = document.getElementById('companyInfo');
 
-            companyInfo.innerHTML = `
-                <div class="info-item">
-                    <div class="info-label">公司全称</div>
-                    <div class="info-content">${mockData.companyName}</div>
+        // 处理空值显示
+        const displayValue = (value, defaultValue = '暂无') => {
+            return value || defaultValue;
+        };
+
+        // 处理员工人数显示
+        const displayEmployeeCount = (count) => {
+            return count ? `${count.toLocaleString()}人` : '未公开';
+        };
+
+        // 处理网址显示
+        const displayWebsite = (url) => {
+            if (!url) return '暂无';
+            const displayUrl = url.replace(/^https?:\/\//, '');
+            return `<a href="${url.startsWith('http') ? url : 'https://'+url}" target="_blank">${displayUrl}</a>`;
+        };
+
+        companyInfo.innerHTML = `
+            <div class="info-sections">
+                <!-- 基本信息部分 -->
+                <div class="info-section">
+                    <h4><i class="fas fa-info-circle"></i> 基本信息</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">公司名称</div>
+                            <div class="info-content">${displayValue(data.companyName)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">英文名称</div>
+                            <div class="info-content">${displayValue(data.englishName)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">曾用名</div>
+                            <div class="info-content">${displayValue(data.formerName, '无')}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">所在地区</div>
+                            <div class="info-content">${displayValue(data.region)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">所属行业</div>
+                            <div class="info-content">${displayValue(data.industry)}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">成立日期</div>
-                    <div class="info-content">${mockData.establishDate}</div>
+
+                <!-- 经营信息部分 -->
+                <div class="info-section">
+                    <h4><i class="fas fa-briefcase"></i> 经营信息</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">主营业务</div>
+                            <div class="info-content">${displayValue(data.mainBusiness)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">主要产品</div>
+                            <div class="info-content">${displayValue(data.products)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">注册资本</div>
+                            <div class="info-content">${displayValue(data.registeredCapital)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">员工人数</div>
+                            <div class="info-content">${displayEmployeeCount(data.employeeCount)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">办公地址</div>
+                            <div class="info-content">${displayValue(data.officeAddress)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">公司官网</div>
+                            <div class="info-content">${displayWebsite(data.website)}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">注册资本</div>
-                    <div class="info-content">${mockData.registeredCapital}</div>
+
+                <!-- 股权结构部分 -->
+                <div class="info-section">
+                    <h4><i class="fas fa-sitemap"></i> 股权结构</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">控股股东</div>
+                            <div class="info-content">${displayValue(data.controllingShareholder)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">实际控制人</div>
+                            <div class="info-content">${displayValue(data.actualController)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">最终控制人</div>
+                            <div class="info-content">${displayValue(data.ultimateController)}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">法定代表人</div>
-                    <div class="info-content">${mockData.legalRepresentative}</div>
+
+                <!-- 公司简介部分 -->
+                <div class="info-section">
+                    <h4><i class="fas fa-file-alt"></i> 公司简介</h4>
+                    <div class="info-content-full">
+                        ${displayValue(data.companyProfile, '暂无公司简介')}
+                    </div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">主营业务</div>
-                    <div class="info-content">${mockData.mainBusiness}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">公司地址</div>
-                    <div class="info-content">${mockData.address}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">公司简介</div>
-                    <div class="info-content">${mockData.introduction}</div>
-                </div>
-            `;
-        }, 500);
+            </div>
+        `;
     }
 
     // 更新股票基本信息

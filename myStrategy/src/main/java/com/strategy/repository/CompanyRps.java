@@ -7,6 +7,8 @@ import com.strategy.model.CompanyInfo;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDate;
+
 @Repository
 public class CompanyRps {
     private final CompanyMapper companyMapper;
@@ -35,5 +37,12 @@ public class CompanyRps {
     }
     public void delThsCpn(String stockCode){
         thsCompanyMapper.delThsCompany(stockCode);
+    }
+
+    public LocalDate getLatestDay(String stockCode) {
+        return thsCompanyMapper.getLatestDay(stockCode);
+    }
+    public CompanyInfo getThsCompany(String stockCode){
+        return thsCompanyMapper.getCompany(stockCode);
     }
 }

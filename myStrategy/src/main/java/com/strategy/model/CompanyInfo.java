@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Date;
 @Data
 public class CompanyInfo {
+    private long id;
     private String stockCode;
     private String companyName;
     private String region;

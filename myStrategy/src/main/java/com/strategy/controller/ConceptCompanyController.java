@@ -1,6 +1,8 @@
 package com.strategy.controller;
 
+import com.strategy.model.CompanyInfo;
 import com.strategy.model.vo.StockConceptVo;
+import com.strategy.service.CompanyService;
 import com.strategy.service.PriceTrendService;
 import com.strategy.service.StockConceptService;
 import com.strategy.service.XueQiuService;
@@ -15,11 +17,9 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class StockConceptController {
+public class ConceptCompanyController {
     @Autowired
-    private XueQiuService xueQiuService;
-    @Autowired
-    private PriceTrendService stockTrendService;
+    private CompanyService companyService;
     @Autowired
     private StockConceptService stockConceptService;
 
@@ -30,6 +30,15 @@ public class StockConceptController {
     @ResponseBody
     public List<StockConceptVo> getStockConcepts(@PathVariable String stockCode) {
         return stockConceptService.getStockConcepts(stockCode);
+    }
+
+    /**
+     * 获取股票基本信息
+     */
+    @GetMapping("api/stock/company/{stockCode}")
+    @ResponseBody
+    public CompanyInfo getCompany(@PathVariable String stockCode) {
+        return companyService.getCompanyByCode(stockCode);
     }
 }
 
