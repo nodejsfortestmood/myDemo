@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CompanyMapper {
     long upsertCompany(Company company);
     Company getCompany(String orgNameCn);
+    void delThsCompany(String stockCode);
 }

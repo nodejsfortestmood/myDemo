@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.strategy.mapper.ThsCompanyMapper">
+    <!-- 插入公司信息 -->
+    <insert id="insertCompanyInfo" parameterType="com.strategy.model.CompanyInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO company_info (
+        stock_code,
+        company_name,
+        region,
+        industry,
+        main_business,
+        products,
+        controlling_shareholder,
+        actual_controller,
+        ultimate_controller,
+        registered_capital,
+        employee_count,
+        office_address,
+        company_profile,
+        english_name,
+        former_name,
+        website,
+        upDay
+        ) VALUES (
+        #{stockCode},
+        #{companyName},
+        #{region},
+        #{industry},
+        #{mainBusiness},
+        #{products},
+        #{controllingShareholder},
+        #{actualController},
+        #{ultimateController},
+        #{registeredCapital},
+        #{employeeCount},
+        #{officeAddress},
+        #{companyProfile},
+        #{englishName},
+        #{formerName},
+        #{website},
+        #{upDay}
+        )
+    </insert>
+    <delete id="delThsCompany">
+        delete from company_info where stock_code=#｛stockCode｝
+    </delete>
+</mapper>

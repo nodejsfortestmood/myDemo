@@ -5,7 +5,6 @@ import com.strategy.model.StockBasic;
 import com.strategy.model.StockDaily;
 import com.strategy.repository.XueQiuRps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +23,16 @@ public class LineService {
         this.taskExecutor = taskExecutor;
     }
 
-    public void makeAllTradeDateLine() {
-        List<StockBasic> allStocks = xueQiuRps.getAllBasicStock();
+    public void upMaLines(StockBasic stockBasicInfo){
         StockDaily daily = new StockDaily();
-        for (StockBasic basic : allStocks) {
+        daily.setStockCode(stockBasicInfo.getStockCode());
+        List<StockDaily> dailies = xueQiuRps.getDailyByCode(daily);
+        taskExecutor.submit(() -> updateLineDailies(dailies));
+    }
+
+    public void makeAllTradeDateLine(List<StockBasic> stocks) {
+        StockDaily daily = new StockDaily();
+        for (StockBasic basic : stocks) {
             daily.setStockCode(basic.getStockCode());
             List<StockDaily> dailies = xueQiuRps.getDailyByCode(daily);
             taskExecutor.submit(() -> updateLineDailies(dailies));
@@ -48,9 +53,6 @@ public class LineService {
         setAvg(avg20, dailies, 20);
         setAvg(avg30, dailies, 30);
         setAvg(avg60, dailies, 60);
-        dailies.removeIf(it -> it.getOk() == 1);
-        log.info("before clear dailyList.size={}", dailies.size());
-        dailies.forEach(it -> it.setOk(1));
         updateDailies(dailies);
     }
 

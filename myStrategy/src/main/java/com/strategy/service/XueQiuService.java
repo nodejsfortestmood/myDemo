@@ -26,13 +26,17 @@ public class XueQiuService {
     private final PriceTrendService priceTrendService;
     private final SignalService signalService;
     private final SignalService2 signalService2;
+    private final LineService lineService;
+    private final StockTrendCalculator stockTrendCalculator;
 
 
-    public XueQiuService(XueQiuRps xueQiuRps, PriceTrendService priceTrendService, SignalService signalService, SignalService2 signalService2) {
+    public XueQiuService(XueQiuRps xueQiuRps, PriceTrendService priceTrendService, SignalService signalService, SignalService2 signalService2, LineService lineService, StockTrendCalculator stockTrendCalculator) {
         this.xueQiuRps = xueQiuRps;
         this.priceTrendService = priceTrendService;
         this.signalService = signalService;
         this.signalService2 = signalService2;
+        this.lineService = lineService;
+        this.stockTrendCalculator = stockTrendCalculator;
     }
 
     public void upsert(StockBasic stockBasic) {
@@ -62,27 +66,42 @@ public class XueQiuService {
         return xueQiuRps.getStock(stockCode,LocalDate.of(2025,8,12));
     }
 
+    public void upStockByCode(String stockCode){
+        StockBasic stockBasicInfo = getStockBasicInfo(stockCode);
+        Map<String, Object> args = new HashMap<>(2);
+        long begin = System.currentTimeMillis();
+        if (stockBasicInfo.getStockCode().equals("SH000001")) {
+            return;
+        }
+        args.put("symbol", stockCode);
+        args.put("begin", begin);
+        String referer = "https://xueqiu.com/hq/screener";
+        String apiurl = "https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${symbol}&begin=${begin}&period=day&type=before&count=-4&indicator=kline,pe,pb,ps,pcf,market_capital";
+        List<StockDaily> singleStockHisList = getSingleStockHisList(apiurl, referer, args);
+        updateStockDaily(singleStockHisList);
+        stockBasicInfo.setStatus(2);
+        // 更新K线数据为最新
+        upsert(stockBasicInfo);
+        // 再算MA线与趋势表
+        lineService.upMaLines(stockBasicInfo);
+        // 趋势表
+        stockTrendCalculator.calculatorByStockCode(stockBasicInfo);
+    }
+
     @Retryable(value = {TimeoutException.class},
             maxAttempts = 3,
             backoff = @Backoff(delay = 1000))
-    public void init() {
+    public void init(List<StockBasic> stocks) {
         // symbol=SH600519&begin=1672502400000
         String referer = "https://xueqiu.com/hq/screener";
         String apiurl = "https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=${symbol}&begin=${begin}&period=day&type=before&count=-4&indicator=kline,pe,pb,ps,pcf,market_capital";
-        List<StockBasic> stocks = getAllBasicStock();
+
         Map<String, Object> args = new HashMap<>(2);
         long begin = System.currentTimeMillis();
-//        long begin = DateHelper.of("2025-05-15").timeStamp();
-//        long begin = LocalDateTime.of(2025, 5, 15, 0, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         for (StockBasic basic : stocks) {
             String stockCode = basic.getStockCode();
             if (basic.getStockCode().equals("SH000001")) {
                 continue;
-            }
-            List<StockDaily> stockDailies = getStockTradeDay(stockCode);
-            if (!stockDailies.isEmpty() && stockDailies.get(0).getChg() != null) {
-                log.info("continue,stockCode={}", stockCode);
-//                continue;
             }
             args.put("symbol", stockCode);
             args.put("begin", begin);
@@ -93,8 +112,8 @@ public class XueQiuService {
                 throw new RuntimeException(e);
             }
             updateStockDaily(singleStockHisList);
-            basic.setStatus(2);
-            upsert(basic);
+//            basic.setStatus(2);
+//            upsert(basic);
             log.info("singleStockHisList result.size ={}", singleStockHisList.size());
         }
     }
@@ -228,7 +247,7 @@ public class XueQiuService {
      */
     public List<StockDailyVo> getKlineData(String stockCode, int days) {
         // 懒加载策略，查询K线数据时，直接把最新的K线数据取回来，再算MA5-60数据
-
+        upStockByCode(stockCode);
         // 参数校验
         if (StringUtils.isBlank(stockCode)) {
             throw new IllegalArgumentException("股票代码不能为空");

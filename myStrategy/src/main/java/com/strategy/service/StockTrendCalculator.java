@@ -52,10 +52,19 @@ public class StockTrendCalculator {
         }
     }
 
-    public void calculator() {
-        List<StockBasic> allStocks = xueQiuRps.getAllBasicStock();
+    public void calculatorByStockCode(StockBasic basic){
         StockDaily daily = new StockDaily();
-        for (StockBasic basic : allStocks) {
+        daily.setStockCode(basic.getStockCode());
+        List<StockDaily> dailies = xueQiuRps.getDailyByCode(daily);
+        taskExecutor.submit(() -> {
+            StockTrend stockTrend = calculateTrends(dailies, basic);
+            updateTrend(List.of(stockTrend));
+        });
+    }
+
+    public void calculator(List<StockBasic> stocks) {
+        StockDaily daily = new StockDaily();
+        for (StockBasic basic : stocks) {
             daily.setStockCode(basic.getStockCode());
             List<StockDaily> dailies = xueQiuRps.getDailyByCode(daily);
             taskExecutor.submit(() -> {

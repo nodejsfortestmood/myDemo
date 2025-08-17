@@ -1,9 +1,12 @@
 package com.strategy.service;
 
+import com.strategy.model.StockBasic;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BusinessService {
@@ -23,9 +26,20 @@ public class BusinessService {
             maxAttempts = 100,
             backoff = @Backoff(delay = 1000))
     public void init() {
-        xueQiuService.init();
-//        industryService.industry();
-        lineService.makeAllTradeDateLine();
-        stockTrendCalculator.calculator();
+        int size = 1;
+        while (size > 0) {
+            List<StockBasic> stocks = xueQiuService.getAllBasicStock();
+            size = stocks.size();
+            xueQiuService.init(stocks);
+            lineService.makeAllTradeDateLine(stocks);
+            stockTrendCalculator.calculator(stocks);
+
+            for (StockBasic basic:stocks) {
+                basic.setStatus(2);
+                xueQiuService.upsert(basic);
+            }
+
+        }
+
     }
 }

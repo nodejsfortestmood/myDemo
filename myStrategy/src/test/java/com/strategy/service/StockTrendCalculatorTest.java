@@ -18,7 +18,7 @@ class StockTrendCalculatorTest {
     private PriceTrendService service;
     @Test
     void calculator() {
-        calculator.calculator();
+        calculator.calculator(null);
     }
 
     @Test

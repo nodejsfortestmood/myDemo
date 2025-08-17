@@ -79,7 +79,7 @@
         ORDER BY trade_date DESC
     </select>
     <select id="geBasicStocks" resultType="com.strategy.model.StockBasic">
-        select * from stock_basic
+        select a.* from stock_basic a INNER JOIN stock_price_trend b on a.stock_code = b.stock_code WHERE a.`status`=1 ORDER BY b.yearRate desc LIMIT 100
     </select>
 
     <update id="batchUpdateMaValues" parameterType="list">
