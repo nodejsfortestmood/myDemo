@@ -207,6 +207,7 @@
             <th class="stock-code-col" data-sort="stockCode">股票代码</th>
             <th class="stock-name-col" data-sort="stockName">股票名称</th>
             <th class="industry-col" data-sort="industry">行业</th>
+            <th class="percent-col" data-sort="yearRate">年涨幅(%)</th>
             <th class="percent-col" data-sort="percent">当前涨幅(%)</th>
             <th class="percent-col" data-sort="month1Rate">1月涨幅(%)</th>
             <th class="percent-col" data-sort="month2Rate">2月涨幅(%)</th>
@@ -220,7 +221,6 @@
             <th class="percent-col" data-sort="month10Rate">10月涨幅(%)</th>
             <th class="percent-col" data-sort="month11Rate">11月涨幅(%)</th>
             <th class="percent-col" data-sort="month12Rate">12月涨幅(%)</th>
-            <th class="percent-col" data-sort="yearRate">年涨幅(%)</th>
             <th class="percent-col" data-sort="percent5">5日(%)</th>
             <th class="percent-col" data-sort="percent10">10日(%)</th>
             <th class="percent-col" data-sort="percent15">15日(%)</th>
@@ -381,9 +381,9 @@
 
                 // 百分比数据 - 添加颜色样式
                 const percentFields = [
-                    'percent','month1Rate','month2Rate','month3Rate',
+                    'yearRate','percent','month1Rate','month2Rate','month3Rate',
                      'month4Rate','month5Rate','month6Rate','month7Rate','month8Rate',
-                     'month9Rate','month10Rate','month11Rate','month12Rate','yearRate',
+                     'month9Rate','month10Rate','month11Rate','month12Rate',
                      'percent5', 'percent10', 'percent15', 'percent20',
                     'percent25', 'percent30'
                 ];
